@@ -1,11 +1,11 @@
 import streamlit as st
 import requests
 
-st.title("Text Classification with Hugging Face Model")
+st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
 
-text_input = st.text_area("Enter text for classification:")
+text_input = st.text_area("Entrez le texte du tweet dont vous souhaitez analyser le sentiment :")
 
-if st.button("Classify"):
+if st.button("Analyser"):
     if text_input:
         # Replace the URL with your Azure FastAPI backend URL
         url = "https://api-projet-7.azurewebsites.net/predict"
@@ -18,6 +18,6 @@ if st.button("Classify"):
             result = response.json()
             st.write(f"Predicted Class ID: {result['predicted_class_id']}")
         else:
-            st.write("Error in classification request")
+            st.write("Erreur dans la requête.")
     else:
-        st.write("Please enter some text for classification")
+        st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
