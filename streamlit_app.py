@@ -8,7 +8,7 @@ text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le senti
 if st.button("Analyser"):
     if text_input:
         # Remplacer l'URL par celle de votre backend FastAPI Azure
-        url = "https://api-projet-7.azurewebsites.net/predict"
+        url = "https://api-projet-7.azurewebsites.net:5000/predict"
         response = requests.post(
             url,
             json={"text": text_input},
