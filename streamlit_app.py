@@ -7,7 +7,7 @@ text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le senti
 
 if st.button("Analyser"):
     if text_input:
-        # Replace the URL with your Azure FastAPI backend URL
+        # Remplacer l'URL par celle de votre backend FastAPI Azure
         url = "https://api-projet-7.azurewebsites.net/predict"
         response = requests.post(
             url,
@@ -16,7 +16,9 @@ if st.button("Analyser"):
         )
         if response.status_code == 200:
             result = response.json()
-            st.write(f"Predicted Class ID: {result['predicted_class_id']}")
+            predicted_class_id = result['predicted_class_id']
+            sentiment = "positif" if predicted_class_id == 1 else "négatif"
+            st.write(f"Le sentiment prédit est : {sentiment}")
         else:
             st.write("Erreur dans la requête.")
     else:
