@@ -3,7 +3,7 @@ import requests
 
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
 
-text_input = st.text_area("Entrez le texte du tweet dont vous souhaitez analyser le sentiment :")
+text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
 if st.button("Analyser"):
     if text_input:
