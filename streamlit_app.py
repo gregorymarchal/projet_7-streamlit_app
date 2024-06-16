@@ -16,9 +16,7 @@ if st.button("Analyser"):
         )
         if response.status_code == 200:
             result = response.json()
-            predicted_class_id = result['predicted_class_id']
-            sentiment = "positif" if predicted_class_id == 1 else "négatif"
-            st.write(f"Le sentiment prédit est : {sentiment}")
+            st.write(f"{result}")
         else:
             st.write("Erreur dans la requête.")
     else:
