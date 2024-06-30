@@ -10,6 +10,10 @@ logger.addHandler(AzureLogHandler(connection_string=connection_string))
 
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
 
+# Initialize session state for feedback
+if 'feedback' not in st.session_state:
+    st.session_state.feedback = None
+
 text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
 if st.button("Analyser"):
@@ -30,6 +34,8 @@ if st.button("Analyser"):
             # Add feedback section
             feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
 
+            st.session_state.feedback = feedback
+
             if feedback == "Non":
                 feedback_data = {
                     "text": text_input,
@@ -39,13 +45,19 @@ if st.button("Analyser"):
                 # Send feedback to Azure Application Insights
                 logger.warning("User feedback", extra=feedback_data)
                 st.write("Merci pour votre retour !")
-                
-                # Button to validate trace sending
-                if st.button("Valider l'envoi de trace"):
-                    logger.warning("Trace validation button clicked", extra=feedback_data)
-                    st.write("Trace envoyée avec succès.")
 
         else:
             st.write("Erreur dans la requête.")
     else:
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
+
+# Show the validate button if feedback is provided
+if st.session_state.feedback == "Non":
+    if st.button("Valider l'envoi de trace"):
+        feedback_data = {
+            "text": text_input,
+            "predicted_sentiment": sentiment,
+            "feedback": st.session_state.feedback
+        }
+        logger.warning("Trace validation button clicked", extra=feedback_data)
+        st.write("Trace envoyée avec succès.")
