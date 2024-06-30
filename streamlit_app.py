@@ -29,18 +29,19 @@ if st.button("Analyser"):
             # Add feedback section
             feedback = st.radio("Le sentiment prédit était-il correct ?", ["Oui", "Non"], index=None)
             
-            if feedback == "Oui":
-                st.write("Merci pour votre retour !")
-                
-            if feedback == "Non":
-                feedback_data = {
-                    "text": text_input,
-                    "predicted_sentiment": sentiment,
-                    "feedback": feedback
-                }
-                # Send feedback to Azure Application Insights
-                logger.warning("User feedback", extra=feedback_data)
-                st.write("Merci pour votre retour !")
+            # Add a submit button to confirm feedback
+            if st.button("Soumettre le retour"):
+                if feedback == "Oui":
+                    st.write("Merci pour votre retour !")
+                elif feedback == "Non":
+                    feedback_data = {
+                        "text": text_input,
+                        "predicted_sentiment": sentiment,
+                        "feedback": feedback
+                    }
+                    # Send feedback to Azure Application Insights
+                    logger.warning("User feedback", extra=feedback_data)
+                    st.write("Merci pour votre retour !")
 
         else:
             st.write("Erreur dans la requête.")
