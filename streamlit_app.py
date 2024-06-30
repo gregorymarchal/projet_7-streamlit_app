@@ -39,6 +39,11 @@ if st.button("Analyser"):
                 # Send feedback to Azure Application Insights
                 logger.warning("User feedback", extra=feedback_data)
                 st.write("Merci pour votre retour !")
+                
+                # Button to validate trace sending
+                if st.button("Valider l'envoi de trace"):
+                    logger.warning("Trace validation button clicked", extra=feedback_data)
+                    st.write("Trace envoyée avec succès.")
 
         else:
             st.write("Erreur dans la requête.")
