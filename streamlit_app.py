@@ -11,23 +11,23 @@ st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning
 
 # Function to reset the session state
 def reset_session():
-    st.session_state.analyze_button_clicked = False
-    st.session_state.sentiment = ""
-    st.session_state.feedback_radio = ""
+    st.session_state['analyze_button_clicked'] = False
+    st.session_state['sentiment'] = ""
+    st.session_state['feedback_given'] = False
 
 # Initialize session state variables if they don't exist
 if 'analyze_button_clicked' not in st.session_state:
-    st.session_state.analyze_button_clicked = False
+    st.session_state['analyze_button_clicked'] = False
 if 'sentiment' not in st.session_state:
-    st.session_state.sentiment = ""
-if 'feedback_radio' not in st.session_state:
-    st.session_state.feedback_radio = ""
+    st.session_state['sentiment'] = ""
+if 'feedback_given' not in st.session_state:
+    st.session_state['feedback_given'] = False
 
 text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
 if st.button("Analyser"):
     if text_input:
-        st.session_state.analyze_button_clicked = True
+        st.session_state['analyze_button_clicked'] = True
         # Remplacer l'URL par celle de votre backend FastAPI Azure
         url = "https://api-projet-7.azurewebsites.net/predict"
         response = requests.post(
@@ -40,14 +40,14 @@ if st.button("Analyser"):
             predicted_class_id = result[0]
             sentiment = "positif" if predicted_class_id == 1 else "négatif"
             st.write(f"Le sentiment prédit est : *{sentiment}*.")
-            st.session_state.sentiment = sentiment
+            st.session_state['sentiment'] = sentiment
         else:
             st.write("Erreur dans la requête.")
-            st.session_state.analyze_button_clicked = False
+            st.session_state['analyze_button_clicked'] = False
     else:
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
 
-if st.session_state.analyze_button_clicked:
+if st.session_state['analyze_button_clicked'] and not st.session_state['feedback_given']:
     feedback = st.radio("Le sentiment prédit était-il correct ?", ["Oui", "Non"], key='feedback_radio')
     
     if st.button("Soumettre le retour"):
@@ -56,12 +56,16 @@ if st.session_state.analyze_button_clicked:
         elif feedback == "Non":
             feedback_data = {
                 "text": text_input,
-                "predicted_sentiment": st.session_state.sentiment,
+                "predicted_sentiment": st.session_state['sentiment'],
                 "feedback": feedback
             }
             # Send feedback to Azure Application Insights
             logger.warning("User feedback", extra=feedback_data)
             st.write("Merci pour votre retour !")
         
-        # Reset session state after feedback submission
-        reset_session()
+        # Set feedback given to true to hide the feedback section
+        st.session_state['feedback_given'] = True
+
+# Reset session state after feedback submission
+if st.session_state['feedback_given']:
+    reset_session()
