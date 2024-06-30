@@ -9,10 +9,21 @@ logger.addHandler(AzureLogHandler(connection_string='InstrumentationKey=55f8c386
 
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
 
-text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
+# Function to reset the session state
+def reset_session():
+    st.session_state.analyze_button_clicked = False
+    st.session_state.sentiment = None
+    st.session_state.feedback_radio = None
 
+# Initialize session state variables if they don't exist
 if 'analyze_button_clicked' not in st.session_state:
     st.session_state.analyze_button_clicked = False
+if 'sentiment' not in st.session_state:
+    st.session_state.sentiment = None
+if 'feedback_radio' not in st.session_state:
+    st.session_state.feedback_radio = None
+
+text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
 if st.button("Analyser"):
     if text_input:
@@ -51,3 +62,6 @@ if st.session_state.analyze_button_clicked:
             # Send feedback to Azure Application Insights
             logger.warning("User feedback", extra=feedback_data)
             st.write("Merci pour votre retour !")
+        
+        # Reset session state after feedback submission
+        reset_session()
