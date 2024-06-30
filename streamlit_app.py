@@ -17,6 +17,8 @@ if 'sentiment' not in st.session_state:
     st.session_state.sentiment = None
 if 'text_input' not in st.session_state:
     st.session_state.text_input = ""
+if 'feedback_logged' not in st.session_state:
+    st.session_state.feedback_logged = False
 
 # Text input
 text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :", st.session_state.text_input)
@@ -42,6 +44,7 @@ if st.button("Analyser"):
 
             # Reset feedback state
             st.session_state.feedback = None
+            st.session_state.feedback_logged = False
 
         else:
             st.write("Erreur dans la requête.")
@@ -54,19 +57,21 @@ if st.session_state.sentiment:
 
     if feedback != st.session_state.feedback:
         st.session_state.feedback = feedback
+        st.session_state.feedback_logged = False
 
-        if feedback == "Non":
-            feedback_data = {
-                "text": st.session_state.text_input,
-                "predicted_sentiment": st.session_state.sentiment,
-                "feedback": feedback
-            }
-            # Send feedback to Azure Application Insights
-            logger.warning("User feedback", extra=feedback_data)
-            st.write("Merci pour votre retour !")
+    if st.session_state.feedback == "Non" and not st.session_state.feedback_logged:
+        feedback_data = {
+            "text": st.session_state.text_input,
+            "predicted_sentiment": st.session_state.sentiment,
+            "feedback": st.session_state.feedback
+        }
+        # Send feedback to Azure Application Insights
+        logger.warning("User feedback", extra=feedback_data)
+        st.write("Merci pour votre retour !")
+        st.session_state.feedback_logged = True
 
 # Show the validate button if feedback is "Non"
-if st.session_state.feedback == "Non":
+if st.session_state.feedback == "Non" and st.session_state.feedback_logged:
     if st.button("Valider l'envoi de trace"):
         feedback_data = {
             "text": st.session_state.text_input,
@@ -75,3 +80,4 @@ if st.session_state.feedback == "Non":
         }
         logger.warning("Trace validation button clicked", extra=feedback_data)
         st.write("Trace envoyée avec succès.")
+        st.session_state.feedback_logged = False
