@@ -10,15 +10,16 @@ logger.addHandler(AzureLogHandler(connection_string=connection_string))
 
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
 
-# Initialize session state for feedback
+# Initialize session state for feedback and sentiment
 if 'feedback' not in st.session_state:
     st.session_state.feedback = None
 if 'sentiment' not in st.session_state:
     st.session_state.sentiment = None
 if 'text_input' not in st.session_state:
-    st.session_state.text_input = None
+    st.session_state.text_input = ""
 
-text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
+# Text input
+text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :", st.session_state.text_input)
 
 if st.button("Analyser"):
     if text_input:
@@ -51,7 +52,7 @@ if st.button("Analyser"):
 if st.session_state.sentiment:
     feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
 
-    if feedback:
+    if feedback != st.session_state.feedback:
         st.session_state.feedback = feedback
 
         if feedback == "Non":
@@ -64,7 +65,13 @@ if st.session_state.sentiment:
             logger.warning("User feedback", extra=feedback_data)
             st.write("Merci pour votre retour !")
 
-            # Show the validate button
-            if st.button("Valider l'envoi de trace"):
-                logger.warning("Trace validation button clicked", extra=feedback_data)
-                st.write("Trace envoyée avec succès.")
+# Show the validate button if feedback is "Non"
+if st.session_state.feedback == "Non":
+    if st.button("Valider l'envoi de trace"):
+        feedback_data = {
+            "text": st.session_state.text_input,
+            "predicted_sentiment": st.session_state.sentiment,
+            "feedback": st.session_state.feedback
+        }
+        logger.warning("Trace validation button clicked", extra=feedback_data)
+        st.write("Trace envoyée avec succès.")
