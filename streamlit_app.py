@@ -11,8 +11,12 @@ st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning
 
 text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
+if 'analyze_button_clicked' not in st.session_state:
+    st.session_state.analyze_button_clicked = False
+
 if st.button("Analyser"):
     if text_input:
+        st.session_state.analyze_button_clicked = True
         # Remplacer l'URL par celle de votre backend FastAPI Azure
         url = "https://api-projet-7.azurewebsites.net/predict"
         response = requests.post(
@@ -25,25 +29,25 @@ if st.button("Analyser"):
             predicted_class_id = result[0]
             sentiment = "positif" if predicted_class_id == 1 else "négatif"
             st.write(f"Le sentiment prédit est : *{sentiment}*.")
-
-            # Add feedback section
-            feedback = st.radio("Le sentiment prédit était-il correct ?", ["Oui", "Non"], index=None)
-            
-            # Add a submit button to confirm feedback
-            if st.button("Soumettre le retour"):
-                if feedback == "Oui":
-                    st.write("Merci pour votre retour !")
-                elif feedback == "Non":
-                    feedback_data = {
-                        "text": text_input,
-                        "predicted_sentiment": sentiment,
-                        "feedback": feedback
-                    }
-                    # Send feedback to Azure Application Insights
-                    logger.warning("User feedback", extra=feedback_data)
-                    st.write("Merci pour votre retour !")
-
+            st.session_state.sentiment = sentiment
         else:
             st.write("Erreur dans la requête.")
+            st.session_state.analyze_button_clicked = False
     else:
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
+
+if st.session_state.analyze_button_clicked:
+    feedback = st.radio("Le sentiment prédit était-il correct ?", ["Oui", "Non"], key='feedback_radio')
+    
+    if st.button("Soumettre le retour"):
+        if feedback == "Oui":
+            st.write("Merci pour votre retour !")
+        elif feedback == "Non":
+            feedback_data = {
+                "text": text_input,
+                "predicted_sentiment": st.session_state.sentiment,
+                "feedback": feedback
+            }
+            # Send feedback to Azure Application Insights
+            logger.warning("User feedback", extra=feedback_data)
+            st.write("Merci pour votre retour !")
