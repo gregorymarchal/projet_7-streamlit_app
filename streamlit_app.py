@@ -28,7 +28,7 @@ if st.button("Analyser"):
         # Save the text input to session state
         st.session_state.text_input = text_input
         
-        # Remplacer l'URL par celle de votre backend FastAPI Azure
+        # Replace the URL with your Azure FastAPI backend URL
         url = "https://api-projet-7.azurewebsites.net/predict"
         response = requests.post(
             url,
@@ -52,13 +52,13 @@ if st.button("Analyser"):
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
 
 # Show feedback section if sentiment is available
-if st.session_state.sentiment and st.session_state.feedback_logged == False:
+if st.session_state.sentiment and not st.session_state.feedback_logged:
     feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
 
     if feedback:
         st.session_state.feedback = feedback
 
-        if feedback == "Non":
+        if feedback == "Non" and not st.session_state.feedback_logged:
             feedback_data = {
                 "text": st.session_state.text_input,
                 "predicted_sentiment": st.session_state.sentiment,
@@ -69,7 +69,7 @@ if st.session_state.sentiment and st.session_state.feedback_logged == False:
             st.write("Merci pour votre retour !")
             st.session_state.feedback_logged = True
 
-# Show the validate button if feedback is "Non" and log has not been sent
+# Show the validate button if feedback is "Non" and log has been sent
 if st.session_state.feedback == "Non" and st.session_state.feedback_logged:
     if st.button("Valider l'envoi de trace"):
         feedback_data = {
