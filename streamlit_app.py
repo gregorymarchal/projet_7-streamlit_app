@@ -52,25 +52,24 @@ if st.button("Analyser"):
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
 
 # Show feedback section if sentiment is available
-if st.session_state.sentiment:
+if st.session_state.sentiment and st.session_state.feedback_logged == False:
     feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
 
-    if feedback != st.session_state.feedback:
+    if feedback:
         st.session_state.feedback = feedback
-        st.session_state.feedback_logged = False
 
-    if st.session_state.feedback == "Non" and not st.session_state.feedback_logged:
-        feedback_data = {
-            "text": st.session_state.text_input,
-            "predicted_sentiment": st.session_state.sentiment,
-            "feedback": st.session_state.feedback
-        }
-        # Send feedback to Azure Application Insights
-        logger.warning("User feedback", extra=feedback_data)
-        st.write("Merci pour votre retour !")
-        st.session_state.feedback_logged = True
+        if feedback == "Non":
+            feedback_data = {
+                "text": st.session_state.text_input,
+                "predicted_sentiment": st.session_state.sentiment,
+                "feedback": feedback
+            }
+            # Send feedback to Azure Application Insights
+            logger.warning("User feedback", extra=feedback_data)
+            st.write("Merci pour votre retour !")
+            st.session_state.feedback_logged = True
 
-# Show the validate button if feedback is "Non"
+# Show the validate button if feedback is "Non" and log has not been sent
 if st.session_state.feedback == "Non" and st.session_state.feedback_logged:
     if st.button("Valider l'envoi de trace"):
         feedback_data = {
