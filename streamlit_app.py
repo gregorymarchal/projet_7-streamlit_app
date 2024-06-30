@@ -11,17 +11,14 @@ st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning
 
 # Function to reset the session state
 def reset_session():
-    st.session_state['analyze_button_clicked'] = False
-    st.session_state['sentiment'] = ""
-    st.session_state['feedback_given'] = False
+    for key in st.session_state.keys():
+        del st.session_state[key]
 
 # Initialize session state variables if they don't exist
 if 'analyze_button_clicked' not in st.session_state:
     st.session_state['analyze_button_clicked'] = False
 if 'sentiment' not in st.session_state:
     st.session_state['sentiment'] = ""
-if 'feedback_given' not in st.session_state:
-    st.session_state['feedback_given'] = False
 
 text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
@@ -47,7 +44,7 @@ if st.button("Analyser"):
     else:
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
 
-if st.session_state['analyze_button_clicked'] and not st.session_state['feedback_given']:
+if st.session_state['analyze_button_clicked']:
     feedback = st.radio("Le sentiment prédit était-il correct ?", ["Oui", "Non"], key='feedback_radio')
     
     if st.button("Soumettre le retour"):
@@ -63,9 +60,6 @@ if st.session_state['analyze_button_clicked'] and not st.session_state['feedback
             logger.warning("User feedback", extra=feedback_data)
             st.write("Merci pour votre retour !")
         
-        # Set feedback given to true to hide the feedback section
-        st.session_state['feedback_given'] = True
-
-# Reset session state after feedback submission
-if st.session_state['feedback_given']:
-    reset_session()
+        # Reset session state after feedback submission
+        reset_session()
+        st.experimental_rerun()
