@@ -13,11 +13,18 @@ st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning
 # Initialize session state for feedback
 if 'feedback' not in st.session_state:
     st.session_state.feedback = None
+if 'sentiment' not in st.session_state:
+    st.session_state.sentiment = None
+if 'text_input' not in st.session_state:
+    st.session_state.text_input = None
 
 text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
 if st.button("Analyser"):
     if text_input:
+        # Save the text input to session state
+        st.session_state.text_input = text_input
+        
         # Remplacer l'URL par celle de votre backend FastAPI Azure
         url = "https://api-projet-7.azurewebsites.net/predict"
         response = requests.post(
@@ -29,35 +36,35 @@ if st.button("Analyser"):
             result = response.json()
             predicted_class_id = result[0]
             sentiment = "positif" if predicted_class_id == 1 else "négatif"
+            st.session_state.sentiment = sentiment
             st.write(f"Le sentiment prédit est : *{sentiment}*.")
 
-            # Add feedback section
-            feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
-
-            st.session_state.feedback = feedback
-
-            if feedback == "Non":
-                feedback_data = {
-                    "text": text_input,
-                    "predicted_sentiment": sentiment,
-                    "feedback": feedback
-                }
-                # Send feedback to Azure Application Insights
-                logger.warning("User feedback", extra=feedback_data)
-                st.write("Merci pour votre retour !")
+            # Reset feedback state
+            st.session_state.feedback = None
 
         else:
             st.write("Erreur dans la requête.")
     else:
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
 
-# Show the validate button if feedback is provided
-if st.session_state.feedback == "Non":
-    if st.button("Valider l'envoi de trace"):
-        feedback_data = {
-            "text": text_input,
-            "predicted_sentiment": sentiment,
-            "feedback": st.session_state.feedback
-        }
-        logger.warning("Trace validation button clicked", extra=feedback_data)
-        st.write("Trace envoyée avec succès.")
+# Show feedback section if sentiment is available
+if st.session_state.sentiment:
+    feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
+
+    if feedback:
+        st.session_state.feedback = feedback
+
+        if feedback == "Non":
+            feedback_data = {
+                "text": st.session_state.text_input,
+                "predicted_sentiment": st.session_state.sentiment,
+                "feedback": feedback
+            }
+            # Send feedback to Azure Application Insights
+            logger.warning("User feedback", extra=feedback_data)
+            st.write("Merci pour votre retour !")
+
+            # Show the validate button
+            if st.button("Valider l'envoi de trace"):
+                logger.warning("Trace validation button clicked", extra=feedback_data)
+                st.write("Trace envoyée avec succès.")
