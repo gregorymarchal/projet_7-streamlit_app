@@ -30,7 +30,7 @@ if st.button("Analyser"):
             # Add feedback section
             feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
 
-            if feedback in ["Oui", "Non"]:
+            if feedback == "Non":
                 feedback_data = {
                     "text": text_input,
                     "predicted_sentiment": sentiment,
