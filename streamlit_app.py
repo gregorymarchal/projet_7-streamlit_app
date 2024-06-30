@@ -12,16 +12,16 @@ st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning
 # Function to reset the session state
 def reset_session():
     st.session_state.analyze_button_clicked = False
-    st.session_state.sentiment = None
-    st.session_state.feedback_radio = None
+    st.session_state.sentiment = ""
+    st.session_state.feedback_radio = ""
 
 # Initialize session state variables if they don't exist
 if 'analyze_button_clicked' not in st.session_state:
     st.session_state.analyze_button_clicked = False
 if 'sentiment' not in st.session_state:
-    st.session_state.sentiment = None
+    st.session_state.sentiment = ""
 if 'feedback_radio' not in st.session_state:
-    st.session_state.feedback_radio = None
+    st.session_state.feedback_radio = ""
 
 text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
 
