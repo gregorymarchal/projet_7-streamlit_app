@@ -27,19 +27,22 @@ if st.button("Analyser"):
             sentiment = "positif" if predicted_class_id == 1 else "négatif"
             st.write(f"Le sentiment prédit est : *{sentiment}*.")
 
-            # Add feedback section
-            feedback = st.radio("Le sentiment prédit était-il correct ?", ("Oui", "Non"))
-
-            if feedback in ["Oui", "Non"]:
-                feedback_data = {
-                    "text": text_input,
-                    "predicted_sentiment": sentiment,
-                    "feedback": feedback
-                }
-                # Send feedback to Azure Application Insights
-                logger.info("User feedback", extra=feedback_data)
-                st.write("Merci pour votre retour !")
-
+            st.write("Le sentiment prédit était-il correct ?")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Oui"):
+                    st.experimental_rerun()
+            with col2:
+                if st.button("Non"):
+                    feedback_data = {
+                        "text": text_input,
+                        "predicted_sentiment": sentiment,
+                        "feedback": "Non"
+                    }
+                    # Send feedback to Azure Application Insights
+                    logger.info("User feedback", extra=feedback_data)
+                    st.write("Merci pour votre retour !")
+                    st.experimental_rerun()
         else:
             st.write("Erreur dans la requête.")
     else:
