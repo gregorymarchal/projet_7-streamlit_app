@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 from opencensus.ext.azure.log_exporter import AzureLogHandler
 import logging
+import time
 
 # Connection string for Azure Application Insights
 connection_string = "InstrumentationKey=55f8c386-676e-4155-b920-c470270eb854;IngestionEndpoint=https://francecentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://francecentral.livediagnostics.monitor.azure.com/;ApplicationId=499673b2-6e2a-4c76-a53c-2ad71070f331"
@@ -37,6 +38,7 @@ if st.button("Analyser"):
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("Oui"):
+                    time.sleep(1)
                     st.experimental_rerun()
             with col2:
                 if st.button("Non"):
@@ -48,6 +50,7 @@ if st.button("Analyser"):
                     # Send feedback to Azure Application Insights
                     logger.warning("User feedback", extra=feedback_data)
                     st.write("Merci pour votre retour !")
+                    time.sleep(1)
                     st.experimental_rerun()
         else:
             st.write("Erreur dans la requête.")
