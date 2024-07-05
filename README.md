@@ -32,7 +32,7 @@ This project is a Streamlit web application for sentiment analysis using Deep Le
 
 1. Run the Streamlit application:
     ```sh
-    streamlit run app.py
+    streamlit run streamlit_app.py
     ```
 
 2. Open your web browser and go to `http://localhost:8501`.
@@ -48,11 +48,11 @@ Unit tests are provided to ensure the functionality of the sentiment analysis.
     python -m unittest discover
     ```
 
-The test cases are defined in `test_app.py` and use the `unittest` framework with `unittest.mock` for mocking API responses.
+The test cases are defined in `test_streamlit_app.py` and use the `unittest` framework with `unittest.mock` for mocking API responses.
 
 ## Logging
 
-This application uses Azure Application Insights for logging user feedback. Ensure you have set up the correct connection string for Azure Application Insights in the `app.py` file.
+This application uses Azure Application Insights for logging user feedback. Ensure you have set up the correct connection string for Azure Application Insights in the `streamlit_app.py` file.
 
 ## Feedback
 
