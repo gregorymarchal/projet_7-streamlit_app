@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from app import analyze_sentiment
+from streamlit_app import streamlit_app
 
 class TestSentimentAnalysis(unittest.TestCase):
 
