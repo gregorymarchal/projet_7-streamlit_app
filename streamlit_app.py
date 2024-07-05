@@ -39,7 +39,7 @@ if st.button("Analyser"):
             with col1:
                 if st.button("Oui"):
                     st.write("Merci pour votre retour !")
-                    time.sleep(5)
+                    st.balloons()
                     st.experimental_rerun()
             with col2:
                 if st.button("Non"):
@@ -51,7 +51,7 @@ if st.button("Analyser"):
                     # Send feedback to Azure Application Insights
                     logger.warning("User feedback", extra=feedback_data)
                     st.write("Merci pour votre retour !")
-                    time.sleep(5)
+                    st.balloons()
                     st.experimental_rerun()
         else:
             st.write("Erreur dans la requête.")
