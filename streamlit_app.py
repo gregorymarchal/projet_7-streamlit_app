@@ -38,6 +38,7 @@ if st.button("Analyser"):
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("Oui"):
+                    st.write("Merci pour votre retour !")
                     time.sleep(1)
                     st.experimental_rerun()
             with col2:
