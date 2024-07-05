@@ -46,7 +46,6 @@ if st.button("Analyser"):
                 logger.warning("User feedback", extra=feedback_data)
                 st.write("Merci pour votre retour !")
                 st.balloons()
-                st.experimental_rerun()
         else:
             st.write("Erreur dans la requête.")
     else:
