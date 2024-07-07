@@ -1,5 +1,8 @@
+import os
 import streamlit as st
 import requests
+
+api_url = os.getenv('API_URL')
 
 # Streamlit application title
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
@@ -19,14 +22,14 @@ st.session_state.text_input = st.text_area("Entrez le texte (en anglais) dont vo
 if st.button("Analyser"):
     if st.session_state.text_input:
         # Replace the URL with your Flask backend on Azure
-        url = "https://api-projet-7.azurewebsites.net/predict"
-        response = requests.post(
-            url,
+        predict_url = f"{api_url}/predict"
+        predict_response = requests.post(
+            predict_url,
             json={"text": st.session_state.text_input},
             headers={"Content-Type": "application/json"},
         )
-        response.raise_for_status()  # Raise an exception for HTTP errors
-        result = response.json()
+        predict_response.raise_for_status()  # Raise an exception for HTTP errors
+        result = predict_response.json()
         predicted_class_id = result[0]
         st.session_state.sentiment = "positif" if predicted_class_id == 1 else "négatif"
         st.write(f"Le sentiment prédit est : *{st.session_state.sentiment}*.")
@@ -45,7 +48,7 @@ if st.session_state.sentiment and not st.session_state.feedback_given:
             "feedback": "Non"
         }
         # Send feedback to Flask backend
-        feedback_url = "https://api-projet-7.azurewebsites.net/feedback"
+        feedback_url = f"{api_url}/feedback"
         feedback_response = requests.post(
             feedback_url,
             json=feedback_data,
