@@ -5,7 +5,7 @@ import requests
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
 
 # Text area for user input
-text_input = st.text_area("Entrez le texte dont vous souhaitez analyser le sentiment :")
+text_input = st.text_area("Entrez le texte (en anglais) dont vous souhaitez analyser le sentiment :")
 
 # Initialize session state
 if "sentiment" not in st.session_state:
