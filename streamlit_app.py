@@ -38,7 +38,6 @@ if st.session_state.sentiment and not st.session_state.feedback_given:
     st.write("Le sentiment prédit était-il correct ?")
     if st.button("Oui"):
         st.session_state.feedback_given = True
-        st.experimental_rerun()
     if st.button("Non"):
         feedback_data = {
             "text": st.session_state.text_input,
@@ -53,7 +52,6 @@ if st.session_state.sentiment and not st.session_state.feedback_given:
             headers={"Content-Type": "application/json"},
         )
         st.session_state.feedback_given = True
-        st.experimental_rerun()
 
 # Show feedback acknowledgment if feedback was given
 if st.session_state.feedback_given:
