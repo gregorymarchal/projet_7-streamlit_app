@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import time
 
 # Streamlit application title
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
@@ -33,7 +34,9 @@ if st.button("Analyser"):
 if st.session_state.sentiment:
     st.write("Le sentiment prédit était-il correct ?")
     if st.button("Oui"):
-        pass
+        st.write("Merci pour votre retour !")
+        time.sleep(2)  # Pause for 2 seconds
+        st.experimental_rerun()
     if st.button("Non"):
         feedback_data = {
             "text": text_input,
@@ -47,4 +50,6 @@ if st.session_state.sentiment:
             json=feedback_data,
             headers={"Content-Type": "application/json"},
         )
-    st.write("Merci pour votre retour ! Appuyez sur F5 pour recharger la page et faire une nouvelle prédiction.")
+        st.write("Merci pour votre retour !")
+        time.sleep(2)  # Pause for 2 seconds
+        st.experimental_rerun()
