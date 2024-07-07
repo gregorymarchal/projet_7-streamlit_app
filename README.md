@@ -1,26 +1,26 @@
-# Sentiment Analysis Project
+# Streamlit Sentiment Analysis Application
 
-This project is a Streamlit web application for sentiment analysis using Deep Learning. The application allows users to input text and receive a sentiment analysis (positive or negative) using a backend FastAPI service hosted on Azure.
+This project is a Streamlit application that allows users to analyze the sentiment of a given text using a pre-trained model hosted on a Flask backend. It also collects user feedback on the predictions.
 
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Testing](#testing)
-- [Logging](#logging)
-- [Feedback](#feedback)
+## Setup
 
-## Installation
+### Prerequisites
+
+- Python 3.6 or higher
+- `pip` (Python package installer)
+
+### Install Dependencies
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/gregorymarchal/projet_7-streamlit_app.git
-    cd projet_7-streamlit_app
+    git clone <repository_url>
+    cd <repository_directory>
     ```
 
 2. Create a virtual environment and activate it:
     ```sh
-    python -m venv venv
-    source venv/bin/activate   # On Windows, use `venv\Scripts\activate`
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
 3. Install the required packages:
@@ -28,32 +28,23 @@ This project is a Streamlit web application for sentiment analysis using Deep Le
     pip install -r requirements.txt
     ```
 
-## Usage
+### Running the Application
 
-1. Run the Streamlit application:
-    ```sh
-    streamlit run streamlit_app.py
+1. Set up the Flask backend URL in `app.py`:
+    ```python
+    url = "https://api-projet-7.azurewebsites.net/predict"
+    feedback_url = "https://api-projet-7.azurewebsites.net/feedback"
     ```
 
-2. Open your web browser and go to `http://localhost:8501`.
-
-3. Enter the text you want to analyze in the text area and click "Analyser".
-
-## Testing
-
-Unit tests are provided to ensure the functionality of the sentiment analysis.
-
-1. Run the tests using:
+2. Run the Streamlit application:
     ```sh
-    python -m unittest discover
+    streamlit run app.py
     ```
 
-The test cases are defined in `test_streamlit_app.py` and use the `unittest` framework with `unittest.mock` for mocking API responses.
+The application will be available at `http://localhost:8501`.
 
-## Logging
+### Running Tests
 
-This application uses Azure Application Insights for logging user feedback. Ensure you have set up the correct connection string for Azure Application Insights in the `streamlit_app.py` file.
-
-## Feedback
-
-If the sentiment prediction is incorrect, users can provide feedback directly in the application. This feedback is logged in Azure Application Insights for further analysis and model improvement.
+To run the unit tests, use the following command:
+```sh
+python -m unittest test_app.py
