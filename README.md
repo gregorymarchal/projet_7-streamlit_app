@@ -13,8 +13,8 @@ This project is a Streamlit application that allows users to analyze the sentime
 
 1. Clone the repository:
     ```sh
-    git clone <repository_url>
-    cd <repository_directory>
+    git clone https://github.com/gregorymarchal/projet_7-streamlit_app.git
+    cd projet_7-streamlit_app
     ```
 
 2. Create a virtual environment and activate it:
@@ -25,7 +25,7 @@ This project is a Streamlit application that allows users to analyze the sentime
 
 3. Install the required packages:
     ```sh
-    pip install -r requirements.txt
+    pip install streamlit
     ```
 
 ### Running the Application
@@ -38,7 +38,7 @@ This project is a Streamlit application that allows users to analyze the sentime
 
 2. Run the Streamlit application:
     ```sh
-    streamlit run app.py
+    streamlit run streamlit_app.py
     ```
 
 The application will be available at `http://localhost:8501`.
@@ -47,4 +47,4 @@ The application will be available at `http://localhost:8501`.
 
 To run the unit tests, use the following command:
 ```sh
-python -m unittest test_app.py
+python -m unittest test_streamlit_app.py
