@@ -10,6 +10,8 @@ text_input = st.text_area("Entrez le texte (en anglais) dont vous souhaitez anal
 # Initialize session state
 if "sentiment" not in st.session_state:
     st.session_state.sentiment = None
+if "feedback_given" not in st.session_state:
+    st.session_state.feedback_given = False
 
 # Analyze button
 if st.button("Analyser"):
@@ -30,11 +32,10 @@ if st.button("Analyser"):
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
 
 # Feedback section
-if st.session_state.sentiment:
+if st.session_state.sentiment and not st.session_state.feedback_given:
     st.write("Le sentiment prédit était-il correct ?")
-    feedback_placeholder = st.empty()
     if st.button("Oui"):
-        feedback_placeholder.write("Merci pour votre retour !")
+        st.session_state.feedback_given = True
         st.experimental_rerun()
     if st.button("Non"):
         feedback_data = {
@@ -49,5 +50,13 @@ if st.session_state.sentiment:
             json=feedback_data,
             headers={"Content-Type": "application/json"},
         )
-        feedback_placeholder.write("Merci pour votre retour !")
+        st.session_state.feedback_given = True
+        st.experimental_rerun()
+
+# Show feedback acknowledgment if feedback was given
+if st.session_state.feedback_given:
+    st.write("Merci pour votre retour !")
+    if st.button("Faire une nouvelle prédiction"):
+        st.session_state.sentiment = None
+        st.session_state.feedback_given = False
         st.experimental_rerun()
