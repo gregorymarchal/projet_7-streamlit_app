@@ -14,42 +14,37 @@ if "sentiment" not in st.session_state:
 # Analyze button
 if st.button("Analyser"):
     if text_input:
-        try:
-            # Replace the URL with your Flask backend on Azure
-            url = "https://api-projet-7.azurewebsites.net/predict"
-            response = requests.post(
-                url,
-                json={"text": text_input},
-                headers={"Content-Type": "application/json"},
-            )
-            response.raise_for_status()  # Raise an exception for HTTP errors
-            result = response.json()
-            predicted_class_id = result[0]
-            st.session_state.sentiment = "positif" if predicted_class_id == 1 else "négatif"
-            st.write(f"Le sentiment prédit est : *{st.session_state.sentiment}*.")
-        except requests.RequestException as e:
-            st.write(f"Erreur dans la requête: {e}")
+        # Replace the URL with your Flask backend on Azure
+        url = "https://api-projet-7.azurewebsites.net/predict"
+        response = requests.post(
+            url,
+            json={"text": text_input},
+            headers={"Content-Type": "application/json"},
+        )
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        result = response.json()
+        predicted_class_id = result[0]
+        st.session_state.sentiment = "positif" if predicted_class_id == 1 else "négatif"
+        st.write(f"Le sentiment prédit est : *{st.session_state.sentiment}*.")
     else:
         st.write("Entrez s'il-vous-plaît le texte dont vous souhaitez analyser le sentiment.")
 
 # Feedback section
 if st.session_state.sentiment:
     st.write("Le sentiment prédit était-il correct ?")
+    if st.button("Oui"):
+        st.write("Merci pour votre retour ! Appuyez sur F5 pour recharger la page et faire une nouvelle prédiction.")
     if st.button("Non"):
         feedback_data = {
             "text": text_input,
             "predicted_sentiment": st.session_state.sentiment,
             "feedback": "Non"
         }
-        try:
-            # Send feedback to Flask backend
-            feedback_url = "https://api-projet-7.azurewebsites.net/feedback"
-            feedback_response = requests.post(
-                feedback_url,
-                json=feedback_data,
-                headers={"Content-Type": "application/json"},
-            )
-            feedback_response.raise_for_status()  # Raise an exception for HTTP errors
-            st.write("Merci pour votre retour !")
-        except requests.RequestException as e:
-            st.write(f"Erreur dans l'envoi du feedback: {e}")
+        # Send feedback to Flask backend
+        feedback_url = "https://api-projet-7.azurewebsites.net/feedback"
+        feedback_response = requests.post(
+            feedback_url,
+            json=feedback_data,
+            headers={"Content-Type": "application/json"},
+        )
+        st.write("Merci pour votre retour ! Appuyez sur F5 pour recharger la page et faire une nouvelle prédiction.")
