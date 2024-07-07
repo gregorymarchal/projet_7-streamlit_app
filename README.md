@@ -30,10 +30,9 @@ This project is a Streamlit application that allows users to analyze the sentime
 
 ### Running the Application
 
-1. Set up the Flask backend URL in `app.py`:
-    ```python
-    url = "https://api-projet-7.azurewebsites.net/predict"
-    feedback_url = "https://api-projet-7.azurewebsites.net/feedback"
+1. Set up the Flask backend URL environment variable:
+    ```sh
+    API_URL="<your_api_url>"
     ```
 
 2. Run the Streamlit application:
