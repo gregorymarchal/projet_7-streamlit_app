@@ -4,23 +4,25 @@ import requests
 # Streamlit application title
 st.title("Projet 7 : Réalisez une analyse de sentiments grâce au Deep Learning")
 
-# Text area for user input
-text_input = st.text_area("Entrez le texte (en anglais) dont vous souhaitez analyser le sentiment :")
-
 # Initialize session state
+if "text_input" not in st.session_state:
+    st.session_state.text_input = ""
 if "sentiment" not in st.session_state:
     st.session_state.sentiment = None
 if "feedback_given" not in st.session_state:
     st.session_state.feedback_given = False
 
+# Text area for user input
+st.session_state.text_input = st.text_area("Entrez le texte (en anglais) dont vous souhaitez analyser le sentiment :", st.session_state.text_input)
+
 # Analyze button
 if st.button("Analyser"):
-    if text_input:
+    if st.session_state.text_input:
         # Replace the URL with your Flask backend on Azure
         url = "https://api-projet-7.azurewebsites.net/predict"
         response = requests.post(
             url,
-            json={"text": text_input},
+            json={"text": st.session_state.text_input},
             headers={"Content-Type": "application/json"},
         )
         response.raise_for_status()  # Raise an exception for HTTP errors
@@ -39,7 +41,7 @@ if st.session_state.sentiment and not st.session_state.feedback_given:
         st.experimental_rerun()
     if st.button("Non"):
         feedback_data = {
-            "text": text_input,
+            "text": st.session_state.text_input,
             "predicted_sentiment": st.session_state.sentiment,
             "feedback": "Non"
         }
@@ -57,6 +59,7 @@ if st.session_state.sentiment and not st.session_state.feedback_given:
 if st.session_state.feedback_given:
     st.write("Merci pour votre retour !")
     if st.button("Faire une nouvelle prédiction"):
+        st.session_state.text_input = ""
         st.session_state.sentiment = None
         st.session_state.feedback_given = False
         st.experimental_rerun()
