@@ -20,12 +20,12 @@ This project is a Streamlit application that allows users to analyze the sentime
 2. Create a virtual environment and activate it:
     ```sh
     python3 -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    source venv/bin/activate
     ```
 
 3. Install the required packages:
     ```sh
-    pip install streamlit
+    pip install -r requirements.txt
     ```
 
 ### Running the Application
@@ -46,4 +46,4 @@ The application will be available at `http://localhost:8501`.
 
 To run the unit tests, use the following command:
 ```sh
-python -m unittest test_streamlit_app.py
+python3 -m unittest test_streamlit_app.py
