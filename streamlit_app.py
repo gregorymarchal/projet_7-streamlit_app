@@ -63,4 +63,4 @@ if st.session_state.feedback_given:
         st.session_state.text_input = ""
         st.session_state.sentiment = None
         st.session_state.feedback_given = False
-        st.experimental_rerun()
+        st.rerun()
