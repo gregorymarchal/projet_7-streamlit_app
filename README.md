@@ -41,9 +41,3 @@ This project is a Streamlit application that allows users to analyze the sentime
     ```
 
 The application will be available at `http://localhost:8501`.
-
-### Running Tests
-
-To run the unit tests, use the following command:
-```sh
-python3 -m unittest test_streamlit_app.py
